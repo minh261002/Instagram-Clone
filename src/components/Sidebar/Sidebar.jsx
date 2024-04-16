@@ -84,11 +84,11 @@ const Sidebar = () => {
                 </Flex>
                 <Tooltip
                     hasArrow
-                    label={"Logout"}
+                    label={"Đăng Xuất"}
                     placement='right'
                     ml={1}
                     openDelay={500}
-                    display={{ base: "block", md: "none" }}
+                    display={{ base: "none", md: "block" }}
                 >
                     <Flex
                         alignItems={"center"}
@@ -99,10 +99,12 @@ const Sidebar = () => {
                         w={{ base: 10, md: "full" }}
                         mt={"auto"}
                         justifyContent={{ base: "center", md: "flex-start" }}
+                        cursor={'pointer'}
                     >
                         <BiLogOut size={25} />
-
-                        Đăng Xuất
+                        <Box display={{ base: "none", md: "flex" }}>
+                            Đăng Xuất
+                        </Box>
                     </Flex>
                 </Tooltip>
             </Flex>
