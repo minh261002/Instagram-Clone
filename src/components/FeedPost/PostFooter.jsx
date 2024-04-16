@@ -2,7 +2,7 @@ import { Flex, Box, Text, InputGroup, Input, InputRightElement, Button } from '@
 import { useState } from 'react'
 
 import { NotificationsLogo, UnlikeLogo, CommentLogo } from '../../assets/constants'
-const PostFooter = ({ username, avatar }) => {
+const PostFooter = ({ username, isProfilePage }) => {
     const [liked, setLiked] = useState(false)
     const [likes, setLikes] = useState(1000)
 
@@ -17,7 +17,7 @@ const PostFooter = ({ username, avatar }) => {
     }
 
     return (
-        <Box mb={10}>
+        <Box mb={10} marginTop={"auto"}>
             <Flex alignItems={'center'} gap={4} w={'full'} pt={0} mb={2} my={4}>
                 <Box onClick={handleLike} cursor={'pointer'} fontSize={18}>
                     {!liked ? <NotificationsLogo /> : <UnlikeLogo />}
@@ -32,16 +32,20 @@ const PostFooter = ({ username, avatar }) => {
                 {likes} lượt thích
             </Text>
 
-            <Text fontSize={'sm'} fontWeight={700}>
-                {username}_{" "}
-                <Text as='span' fontWeight={400}>
-                    Lorem ipsum dolor sit amet
-                </Text>
-            </Text>
+            {!isProfilePage && (
+                <>
+                    <Text fontSize={'sm'} fontWeight={700}>
+                        {username}_{" "}
+                        <Text as='span' fontWeight={400}>
+                            Lorem ipsum dolor sit amet
+                        </Text>
+                    </Text>
 
-            <Text fontSize={'sm'} color={'gray'}>
-                Xem tất cả 100 bình luận
-            </Text>
+                    <Text fontSize={'sm'} color={'gray'}>
+                        Xem tất cả 100 bình luận
+                    </Text>
+                </>
+            )}
 
             <Flex alignItems={'center'} justifyContent={'space-between'} gap={2} w={'full'}>
                 <InputGroup>
