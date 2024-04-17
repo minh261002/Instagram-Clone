@@ -1,4 +1,4 @@
-import { Flex, Avatar, Text, Button } from "@chakra-ui/react"
+import { Flex, Avatar, Text, Spinner, Button } from "@chakra-ui/react"
 import useLogout from "../../hooks/useLogout"
 import useAuthStore from "../../store/authStore";
 import { Link } from "react-router-dom";
@@ -6,6 +6,14 @@ import { Link } from "react-router-dom";
 const SuggestedHeader = () => {
     const { handleLogout, isLoggingOut } = useLogout();
     const authUser = useAuthStore(state => state.user);
+
+    if (!authUser) {
+        return (
+            <Flex flexDir={'column'} justifyContent={'flex-start'} alignItems={'center'} h={'100vh'}>
+                <Spinner size={'xl'} />
+            </Flex>
+        );
+    }
 
     return (
         <Flex justifyContent={'space-between'} alignItems={'center'} w={'full'}>

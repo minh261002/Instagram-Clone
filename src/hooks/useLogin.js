@@ -2,6 +2,7 @@ import { useSignInWithEmailAndPassword } from "react-firebase-hooks/auth";
 import { auth, firestore } from "../firebase/firebase";
 import { doc, getDoc } from "firebase/firestore";
 import useAuthStore from "../store/authStore";
+import Swal from "sweetalert2";
 
 const useLogin = () => {
     const [
@@ -38,7 +39,6 @@ const useLogin = () => {
                     text: 'Thông tin đăng nhập không chính xác'
                 })
             }
-
         } catch (error) {
             console.log(error)
         }

@@ -33,7 +33,22 @@ const UseSignUpWithEmailAndPassword = () => {
             Swal.fire({
                 icon: 'error',
                 title: 'Lỗi',
-                text: 'Tên người dùng đã tồn tại'
+                text: 'Tên người dùng đã được sử dụng'
+            })
+
+            return;
+        }
+
+        //kiểm tra email
+        const emailRef = collection(firestore, 'users');
+        const emailQuery = query(emailRef, where("email", "==", inputs.email));
+        const emailQuerySnapshot = await getDocs(emailQuery);
+
+        if (!emailQuerySnapshot.empty) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Lỗi',
+                text: 'Email đã được đăng ký với tài khoản khác'
             })
 
             return;
