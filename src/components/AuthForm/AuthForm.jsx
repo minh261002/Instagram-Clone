@@ -1,13 +1,14 @@
 import { Input, Text, Flex, Button, Box, Image, VStack } from '@chakra-ui/react'
 import { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
 import Swal from 'sweetalert2'
 import withReactContent from 'sweetalert2-react-content'
+import Login from './Login'
+import Signup from './Signup'
+import GoogleAuth from './GoogleAuth'
 
 const AuthForm = () => {
     const MySwal = withReactContent(Swal)
 
-    const navigate = useNavigate();
     const [isLogin, setIsLogin] = useState(true);
     const [inputs, setInputs] = useState({
         email: '',
@@ -33,34 +34,7 @@ const AuthForm = () => {
                 <VStack spacing={4}>
                     <Image src='/logo.png' h={24} cursor={'pointer'} />
 
-                    <Input
-                        placeholder='Email'
-                        fontSize={14}
-                        type='email'
-                        value={inputs.email}
-                        onChange={(e) => { setInputs({ ...inputs, email: e.target.value }) }}
-                    />
-
-                    <Input
-                        placeholder='Mật Khẩu'
-                        fontSize={14}
-                        type='password'
-                        value={inputs.password}
-                        onChange={(e) => { setInputs({ ...inputs, password: e.target.value }) }}
-                    />
-                    {!isLogin ? (
-                        <Input
-                            placeholder='Nhập Lại Mật Khẩu'
-                            fontSize={14}
-                            type='password'
-                            value={inputs.confirmPassword}
-                            onChange={(e) => { setInputs({ ...inputs, confirmPassword: e.target.value }) }}
-                        />
-                    ) : null}
-
-                    <Button w={'full'} colorScheme='blue' size={'sm'} fontSize={14} onClick={handleAuth}>
-                        {isLogin ? "Đăng Nhập" : "Đăng Ký"}
-                    </Button>
+                    {isLogin ? <Login /> : <Signup />}
 
                     <Flex alignItems={"center"} justifyContent={'center'} my={4} gap={1} w={'full'}>
                         <Box flex={2} h={'1px'} bg={"gray.400"} />
@@ -68,12 +42,7 @@ const AuthForm = () => {
                         <Box flex={2} h={'1px'} bg={"gray.400"} />
                     </Flex>
 
-                    <Flex alignItems={'center'} justifyContent={'center'} cursor={'pointer'}>
-                        <Image src='/google.png' w={5} />
-                        <Text mx={2} color={'blue.500'}>
-                            Đăng Nhập Với Google
-                        </Text>
-                    </Flex>
+                    <GoogleAuth />
                 </VStack>
             </Box>
 

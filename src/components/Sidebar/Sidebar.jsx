@@ -1,10 +1,12 @@
-import { Box, Link, Tooltip, Avatar, Flex } from "@chakra-ui/react";
+import { Box, Link, Tooltip, Avatar, Flex, Button } from "@chakra-ui/react";
 import { CreatePostLogo, InstagramLogo, InstagramMobileLogo, NotificationsLogo, SearchLogo } from '../../assets/constants'
 import { AiFillHome } from 'react-icons/ai';
 import { Link as RouterLink } from "react-router-dom";
 import { BiLogOut } from "react-icons/bi";
+import useLogout from "../../hooks/useLogout";
 
 const Sidebar = () => {
+    const { handleLogout, isLoggingOut, error } = useLogout();
 
     const sidebarItem = [
         {
@@ -91,6 +93,7 @@ const Sidebar = () => {
                     display={{ base: "none", md: "block" }}
                 >
                     <Flex
+                        onClick={handleLogout}
                         alignItems={"center"}
                         gap={4}
                         _hover={{ bg: "whiteAlpha.400" }}
@@ -102,9 +105,13 @@ const Sidebar = () => {
                         cursor={'pointer'}
                     >
                         <BiLogOut size={25} />
-                        <Box display={{ base: "none", md: "flex" }}>
+                        <Button display={{ base: "none", md: "flex" }}
+                            variant={"ghost"}
+                            _hover={{ bg: "transparent" }}
+                            isLoading={isLoggingOut}
+                        >
                             Đăng Xuất
-                        </Box>
+                        </Button>
                     </Flex>
                 </Tooltip>
             </Flex>
