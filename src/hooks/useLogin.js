@@ -23,7 +23,6 @@ const useLogin = () => {
             })
             return;
         }
-
         try {
             const userCred = await siginInWithEmailAndPassword(inputs.email, inputs.password);
             if (userCred) {
