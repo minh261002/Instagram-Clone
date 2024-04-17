@@ -1,9 +1,12 @@
 import { useCreateUserWithEmailAndPassword } from 'react-firebase-hooks/auth'
 import { auth, firestore } from '../firebase/firebase'
 import Swal from 'sweetalert2'
-import { doc, setDoc } from 'firebase/firestore'
+import { collection, doc, getDocs, query, setDoc, where } from 'firebase/firestore'
+import useAuthStore from '../store/authStore'
 
 const UseSignUpWithEmailAndPassword = () => {
+    const loginUser = useAuthStore(state => state.login)
+    const logoutUser = useAuthStore(state => state.logout)
 
     const [
         createUserWithEmailAndPassword,
@@ -19,6 +22,20 @@ const UseSignUpWithEmailAndPassword = () => {
                 title: 'Lỗi',
                 text: 'Vui lòng nhập đầy đủ thông tin'
             })
+            return;
+        }
+
+        const userRef = collection(firestore, 'users');
+        const q = query(userRef, where("username", "==", inputs.username));
+        const querySnapshot = await getDocs(q);
+
+        if (!querySnapshot.empty) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Lỗi',
+                text: 'Tên người dùng đã tồn tại'
+            })
+
             return;
         }
 
@@ -48,13 +65,21 @@ const UseSignUpWithEmailAndPassword = () => {
                     posts: [],
                     createdAt: Date.now()
                 }
+
                 await setDoc(doc(firestore, 'users', newUser.user.uid), userDoc);
                 localStorage.setItem('user', JSON.stringify(userDoc));
+                loginUser(userDoc);
 
                 Swal.fire({
                     icon: 'success',
                     title: 'Thành Công',
                     text: 'Đăng ký thành công'
+                })
+            } else {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Lỗi',
+                    text: "Đã có lỗi xảy ra, vui lòng thử lại"
                 })
             }
 
