@@ -2,14 +2,17 @@ import { AvatarGroup, Avatar, Text, Flex, VStack, Button, useDisclosure } from "
 import useUserProfileStore from "../../store/useProfileStore"
 import useAuthStore from "../../store/authStore";
 import EditProfile from "./EditProfile";
+import useFollowUser from "../../hooks/useFollowUser";
 
 const ProfileHeader = () => {
     const { userProfile } = useUserProfileStore();
     const authUser = useAuthStore(state => state.user);
+    const { isOpen, onOpen, onClose } = useDisclosure();
+    const { isFollowing, isUpdating, handleFollowUser } = useFollowUser(userProfile?.uid);
+
     const visittingOwnProfileAndAuth = authUser && authUser.username === userProfile.username;
     const visittingAnotherProfileAndAuth = authUser && authUser.username !== userProfile.username;
 
-    const { isOpen, onOpen, onClose } = useDisclosure();
 
     return (
         <Flex gap={{ base: 4, sm: 10 }} py={10} direction={{ base: "column", sm: "row" }}>
@@ -38,8 +41,8 @@ const ProfileHeader = () => {
 
                     {visittingAnotherProfileAndAuth && (
                         <Flex gap={4} alignItems={'center'} justifyContent={'center'}>
-                            <Button bg={"blue.500"} color={"black"} _hover={{ bg: "whiteAlpha.800" }} size={{ base: "xs", md: "sm" }}>
-                                Theo Dõi
+                            <Button isLoading={isUpdating} onClick={handleFollowUser} bg={"blue.500"} color={"black"} _hover={{ bg: "whiteAlpha.800" }} size={{ base: "xs", md: "sm" }}>
+                                {isFollowing ? "Bỏ theo dõi" : "Theo dõi"}
                             </Button>
                         </Flex>
                     )}
