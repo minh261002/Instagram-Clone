@@ -42,7 +42,7 @@ const ProfileHeader = () => {
                     {visittingAnotherProfileAndAuth && (
                         <Flex gap={4} alignItems={'center'} justifyContent={'center'}>
                             <Button isLoading={isUpdating} onClick={handleFollowUser} bg={"blue.500"} color={"black"} _hover={{ bg: "whiteAlpha.800" }} size={{ base: "xs", md: "sm" }}>
-                                {isFollowing ? "Bỏ theo dõi" : "Theo dõi"}
+                                {isFollowing ? 'Huỷ Theo Dõi' : 'Theo Dõi'}
                             </Button>
                         </Flex>
                     )}

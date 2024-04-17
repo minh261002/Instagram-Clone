@@ -67,7 +67,7 @@ const useFollowUser = (userId) => {
                 setIsFollowing(true);
             }
         } catch (error) {
-            console.error("Error following user: ", error);
+            console.log(error)
         } finally {
             setIsUpdating(false);
         }

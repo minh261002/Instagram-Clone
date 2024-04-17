@@ -4,34 +4,10 @@ import { AiFillHome } from 'react-icons/ai';
 import { Link as RouterLink } from "react-router-dom";
 import { BiLogOut } from "react-icons/bi";
 import useLogout from "../../hooks/useLogout";
+import SidebarItem from "./SidebarItem";
 
 const Sidebar = () => {
     const { handleLogout, isLoggingOut, error } = useLogout();
-
-    const sidebarItem = [
-        {
-            icon: <AiFillHome size={25} />,
-            text: 'Trang Chủ',
-            link: '/'
-        },
-        {
-            icon: <SearchLogo />,
-            text: "Tìm Kiếm",
-        },
-        {
-            icon: <NotificationsLogo />,
-            text: "Thông Báo"
-        },
-        {
-            icon: <CreatePostLogo />,
-            text: "Tạo Bài Viết"
-        },
-        {
-            icon: <Avatar size={"sm"} name="Trần Công Minh" src="/profilepic.png" />,
-            text: "Trang Cá Nhân",
-            link: "/profile",
-        }
-    ];
 
     return (
         <Box
@@ -55,35 +31,9 @@ const Sidebar = () => {
                 </Link>
 
                 <Flex direction={'column'} gap={5} cursor={'pointer'}>
-                    {sidebarItem.map((item, index) => (
-                        <Tooltip
-                            key={index}
-                            hasArrow
-                            label={item.text}
-                            placement="right"
-                            ml={1}
-                            openDelay={500}
-                            display={{ base: 'block', md: 'none' }}
-                        >
-                            <Link
-                                display={'flex'}
-                                to={item.link || null}
-                                as={RouterLink}
-                                alignItems={'center'}
-                                gap={4}
-                                _hover={{ bg: "whiteAlpha.400" }}
-                                borderRadius={6}
-                                p={2}
-                                w={{ base: 10, md: "full" }}
-                            >
-                                {item.icon}
-                                <Box display={{ base: "none", md: "flex" }}>
-                                    {item.text}
-                                </Box>
-                            </Link>
-                        </Tooltip>
-                    ))}
+                    <SidebarItem />
                 </Flex>
+
                 <Tooltip
                     hasArrow
                     label={"Đăng Xuất"}
