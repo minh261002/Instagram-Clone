@@ -1,23 +1,37 @@
 import { VStack, Flex, Text, Box } from '@chakra-ui/react'
 import SuggestedHeader from './SuggestedHeader'
 import SuggestedUser from './SuggestedUser'
+import useGetSuggestedUser from '../../hooks/useGetSuggestedUser'
 
 const SuggestedUsers = () => {
+    const { isLoading, suggestedUsers } = useGetSuggestedUser()
+
+    if (isLoading) return null;
     return (
         <VStack py={8} px={6} gap={4}>
             <SuggestedHeader />
 
-            <Flex alignItems={'center'} justifyContent={'space-between'} w={'full'}>
-                <Text fontSize={12} fontWeight={'bold'} color={'gray.500'}>
-                    Gợi Ý Cho Bạn
-                </Text>
+            {suggestedUsers.length === 0 && (
+                <Flex w={'full'} justify={'center'} align={'center'}>
+                    <Text fontSize={14} color={"gray.500"}>
+                        Không Có Gợi Ý Nào Cho Bạn
+                    </Text>
+                </Flex>)}
 
-                <Text fontSize={12} fontWeight={'bold'} _hover={{ color: "gray.400" }} cursor={'pointer'}>
-                    Xem Tất Cả
-                </Text>
-            </Flex>
+            {suggestedUsers.length > 0 && (
+                <Flex alignItems={'center'} justifyContent={'space-between'} w={'full'}>
+                    <Text fontSize={12} fontWeight={'bold'} color={'gray.500'}>
+                        Gợi Ý Cho Bạn
+                    </Text>
 
-            <SuggestedUser followers={1000} name={'Trần Công Minh'} avatar={'/profilepic.png'} />
+                    <Text fontSize={12} fontWeight={'bold'} _hover={{ color: "gray.400" }} cursor={'pointer'}>
+                        Xem Tất Cả
+                    </Text>
+                </Flex>
+            )}
+            {suggestedUsers.map((user) => (
+                <SuggestedUser key={user.id} user={user} />
+            ))}
 
             <Box fontSize={12} color={"gray.500"} mt={5} alignSelf={'start'} w={'full'}>
                 <Text as={"span"} mr={2} w={'full'}>
