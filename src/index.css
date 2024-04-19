@@ -13,3 +13,7 @@
 ::-webkit-scrollbar-thumb:hover {
     background-color: #555;
 }
+
+.swal2-popup {
+    z-index: 999999 !important;
+}

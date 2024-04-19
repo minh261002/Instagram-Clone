@@ -1,4 +1,4 @@
-import { GridItem, Avatar, Box, Flex, Text, Image, ModalContent, Modal, ModalOverlay, VStack, ModalCloseButton, ModalBody, useDisclosure, Divider } from "@chakra-ui/react"
+import { GridItem, Avatar, Box, Flex, Text, Image, ModalContent, Modal, ModalOverlay, VStack, ModalCloseButton, ModalBody, useDisclosure, Divider, Button } from "@chakra-ui/react"
 
 import { AiFillHeart } from "react-icons/ai"
 import { FaComment } from "react-icons/fa"
@@ -6,10 +6,70 @@ import { MdDelete } from "react-icons/md"
 import Comment from "../../components/Comment/Comment"
 import PostFooter from "../../components/FeedPost/PostFooter"
 import useUserProfileStore from "../../store/useProfileStore"
+import useAuthStore from "../../store/authStore"
+import { useState } from "react"
+import { firestore, storage } from '../../firebase/firebase'
+import { deleteObject, ref } from "firebase/storage"
+import { arrayRemove, deleteDoc, doc, updateDoc } from "firebase/firestore"
+import usePostStore from "../../store/postStore"
+import Swal from "sweetalert2"
 
 const ProfilePost = ({ post }) => {
     const { isOpen, onOpen, onClose } = useDisclosure()
     const userProfile = useUserProfileStore(state => state.userProfile);
+    const authUser = useAuthStore(state => state.user);
+    const [isDeleting, setIsDeleting] = useState(false);
+    const deletePost = usePostStore(state => state.deletePost);
+
+    const handleDeletePost = async () => {
+
+        setIsDeleting(true);
+
+        //xác nhận xóa bài viết
+        const confirm = Swal.fire({
+            title: 'Xác nhận xóa bài viết',
+            text: 'Bạn có chắc chắn muốn xóa bài viết này?',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Xóa',
+            cancelButtonText: 'Hủy',
+        })
+            .then(async (result) => {
+                if (result.isConfirmed) {
+                    try {
+                        const imageRef = ref(storage, `posts/${post.id}`);
+                        await deleteObject(imageRef);
+
+                        const userRef = doc(firestore, 'users', authUser.uid);
+                        await deleteDoc(doc(firestore, 'posts', post.id));
+
+                        await updateDoc(userRef, {
+                            posts: arrayRemove(post.id)
+                        })
+
+                        deletePost(post.id)
+
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Xóa bài viết thành công',
+                            showConfirmButton: true,
+                            timer: 1500,
+                        })
+                    } catch (error) {
+                        console.log(error)
+                    } finally {
+                        setIsDeleting(false);
+                    }
+                }
+            })
+            ;
+
+        onClose();
+
+
+    }
 
     return (
         <>
@@ -79,9 +139,18 @@ const ProfilePost = ({ post }) => {
                                         </Text>
                                     </Flex>
 
-                                    <Box _hover={{ bg: "whiteAlpha.300", color: "red.600" }} borderRadius={4} p={1}>
-                                        <MdDelete size={20} cursor={"pointer"} />
-                                    </Box>
+                                    {authUser?.uid === userProfile.uid && (
+                                        <Button
+                                            _hover={{ bg: "whiteAlpha.300", color: "red.600" }}
+                                            borderRadius={4}
+                                            p={1}
+                                            size={"sm"}
+                                            bg={"transparent"}
+                                            onClick={handleDeletePost}
+                                        >
+                                            <MdDelete size={20} cursor={"pointer"} />
+                                        </Button>
+                                    )}
                                 </Flex>
 
                                 <Divider my={4} bg={"gray.500"} />
