@@ -5,6 +5,7 @@ import "./index.css";
 import { ChakraProvider } from "@chakra-ui/react";
 import { extendTheme } from "@chakra-ui/react";
 import { mode } from "@chakra-ui/theme-tools";
+import { SpeedInsights } from "@vercel/speed-insights/react";
 
 const styles = {
   global: (props) => ({
@@ -27,6 +28,7 @@ ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
     <ChakraProvider theme={theme}>
       <App />
+      <SpeedInsights />
     </ChakraProvider>
   </React.StrictMode>
 );
